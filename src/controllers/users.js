@@ -1,42 +1,49 @@
-import { v4 as uuidv4 } from 'uuid';
 
-//finto db
-let users = [];
+import mongoose from 'mongoose';
+import { userModel } from '../models/user-schema.js';
+const ObjectId = mongoose.Types.ObjectId;
 
 
-export const getAllUsers = (req,res)=>{
-  res.send(users)
-};
-
-export const getUser = (req,res)=>{
-  const { id } = req.params
-  // const { name } = req.body
-  const userFind = users.find((user)=> user.id === id)
+export const getUser = async (req,res)=>{
+  const id = req.params.id
+  const userFind = await userModel.findById(id)
   res.send(userFind)
+  // const userFind = users.find((user)=> user.id === id)
+  // res.send(userFind)
 };
 
 
 export const createUser = (req,res)=>{
-  const user = req.body
-  //cambiato in db 
-  users.push({...user,id: uuidv4()})
-  console.log(users)
-  //risposta all'utente
-  res.send(`user with the name of ${user.name} has been created`)
+  const user = new userModel({
+    name: req.body.name,
+    surname: req.body.surname,
+    // email: req.body.email,
+  })
+  user.save().then(()=>{
+    res.send(`New user create with the name of ${user.name}`)
+  })
 };
 
 
-export const updateUser = (req,res)=>{
-  const { id } = req.params
-  const { name } = req.body
-  const userFind = users.find((user)=> user.id === id)
+export const updateUser = async (req,res)=>{
+  const id  = req.params.id
 
-  if(name) userFind.name = name;
-  res.send("user has been updated")
+  const data = {
+    name: req.body.name,
+    surname: req.body.surname,
+    email: req.body.email,
+  };
+
+  const userFind = await userModel.findByIdAndUpdate(id, data)
+  res.send(userFind)
+  // const userFind = userModel.findById(id)
+  // res.send(`${userFind}`)
 };
 
-export const deleteUser = (req,res)=>{
-  const { id } = req.params
-  users = users.filter((user)=> user.id !== id)
-  res.send("user has been deleted")
+export const deleteUser = async (req,res)=>{
+  const id  = req.params.id
+  const userFind = await userModel.findByIdAndDelete(id)
+  res.send("User deleted")
+  // users = users.filter((user)=> user.id !== id)
+  // res.send("user has been deleted")
 };
