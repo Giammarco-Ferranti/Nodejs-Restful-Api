@@ -38,55 +38,52 @@ export const getUser = async (req,res)=>{
 
 export const createUser = async (req,res)=>{
   try {
-    console.log(req.body)
-
-    // if(_.isEmpty(req.body)){
-    //   res.status(400)
-    //   res.send("Data not correct. Name, surname and email are required.")
-    //   return
-    // }
-
-    console.log(req.body)
-
     const user = new userModel({
       name: req.body.name,
       surname: req.body.surname,
       email: req.body.email,
     })
-
-    if(user == error){
-      console.log(error)
-    }
     
     await user.save().then(()=>{
-        res.status(200)
-        res.send(`New user create with the name of ${user.name}`)
-      })  
+      res.status(200)
+      res.send(`New user create with the name of ${user.name}`)
+    })  
   } catch (error) {
-    res.send(error)
-    //  if(error){
-    //   res.status(400)
-    //   res.send(error.name.message)
-    //   res.send(error.surname.message)
-    //   res.send(error.email.message)
-      
-    // }
+    if(error.name === "ValidationError"){
+      res.status(400)
+      res.send(error.message)
+      return
+    }
+    res.status(500).send("Something went wrong")
   }
 };
 
 
 export const updateUser = async (req,res)=>{
-  const id  = req.params.id
+  try {
+    const id  = req.params.id
+  
+    const data = {
+      name: req.body.name,
+      surname: req.body.surname,
+      email: req.body.email,
+    };
+    const userFind = await userModel.findByIdAndUpdate(id, data)
+    if(userFind){
+      res.status(200)
+      res.send(userFind)
+    }
+    
+  } catch (error) {
+    // if(data === "" || undefined || null){
+    //   res.status(400)
+    //   res.send("A field is required")
+    // }
+    // console.log(error)
+  }
 
-  const data = {
-    name: req.body.name,
-    surname: req.body.surname,
-    email: req.body.email,
-  };
-
-  const userFind = await userModel.findByIdAndUpdate(id, data)
-  res.send(userFind)
 };
+
 
 export const deleteUser = async (req,res)=>{
   const id  = req.params.id
