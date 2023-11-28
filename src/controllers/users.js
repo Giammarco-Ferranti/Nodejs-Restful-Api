@@ -84,14 +84,31 @@ export const updateUser = async (req,res)=>{
     
     
   } catch (error) {
-    console.log(error);
+    if(error){
+      res.status(500)
+      res.send(error.message)
+    }
   };
 
 };
 
 
 export const deleteUser = async (req,res)=>{
-  const id  = req.params.id;
-  const userFind = await userModel.findByIdAndDelete(id);
-  res.send("User deleted");
+  try {
+    const id  = req.params.id;
+    const userFind = await userModel.findByIdAndDelete(id);
+  
+    if(!userFind){
+      res.status(400)
+      res.send("the user has not been found")
+      return
+    }else{
+      res.status(200)
+      res.send("User deleted");
+    }
+    
+  } catch (error) {
+    res.status(500)
+    res.send(error.message)
+  }
 };
