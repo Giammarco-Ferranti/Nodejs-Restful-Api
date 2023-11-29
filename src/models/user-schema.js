@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema ({
-  
 name: {
 type: String, 
 required: [true, "A name is required"]
@@ -20,5 +19,6 @@ type: String,
 required: [true, "An email is required"]
 }
 });
+
 
 export const userModel = mongoose.model('user', userSchema);
