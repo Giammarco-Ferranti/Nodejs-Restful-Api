@@ -30,7 +30,7 @@ it("should return status 200 and user data if found", async ()=>{
   sinon.stub(mongoose.Model, "findById").resolves(user)
   await getUser(req, res);
   expect(res.status).to.have.been.calledWith(200)
-  expect(res.send).to.have.been.calledWith(doc)
+  expect(res.send).to.have.been.calledWith(user)
 })
 
 it("should return 400 if the req is not correct", async ()=>{
@@ -121,7 +121,7 @@ describe("updateUser", ()=>{
 });
 
 
-describe("deletUser", ()=>{
+describe("deleteUser", ()=>{
   it("delete the user", ()=>{
     const req = {
       params: {

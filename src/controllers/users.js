@@ -1,8 +1,27 @@
 
 import mongoose from 'mongoose';
-import _ from 'lodash';
 import { userModel } from '../models/user-schema.js';
 const ObjectId = mongoose.Types.ObjectId;
+
+
+
+export const getAllUsers = async (req, res)=>{
+  try {
+    const allUsers = await userModel.find()
+
+   if(allUsers) {
+      res.status(200)
+      res.send(allUsers)
+    }
+
+  } catch (error) {
+  if(error){
+    res.status(500)
+    console.log(error)
+    res.send("Server error")
+  }
+  }
+}
 
 
 export const getUser = async (req,res)=>{
