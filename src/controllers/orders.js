@@ -34,7 +34,7 @@ export const getOrdersByProduct = async (req, res)=>{
     }
 
     const orderFind = await ordersModel.find({product: product_id}).exec()
-    
+
     if(orderFind){
       res.status(200)
       res.send(orderFind)
@@ -166,7 +166,7 @@ export const updateOrder = async (req,res)=>{
 
     if(orderFind){
       res.status(200);
-      res.send("product updated");
+      res.send("Order updated");
     }
     
     
