@@ -1,5 +1,6 @@
 
 import mongoose from 'mongoose';
+import _ from "lodash";
 import { userModel } from '../models/user-schema.js';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -7,12 +8,19 @@ const ObjectId = mongoose.Types.ObjectId;
 
 export const getAllUsers = async (req, res)=>{
   try {
-    const allUsers = await userModel.find()
+    const allUsers = await userModel.find({})
 
-   if(allUsers) {
-      res.status(200)
-      res.send(allUsers)
+    if(_.isEmpty(allUsers)){
+      res.status(400)
+      res.send("No users")
+      return
     }
+
+    if(allUsers) {
+       res.status(200)
+       res.send(allUsers)
+     }
+
 
   } catch (error) {
   if(error){
@@ -74,7 +82,17 @@ export const createUser = async (req,res)=>{
       res.send(error.message);
       return;
     }
-    res.status(500).send("Something went wrong");
+
+    if(error.message.includes("E11000")){
+      res.status(400)
+      res.send("Email already taken")
+      return
+    }
+
+    console.log(error.message)
+   
+      
+      res.status(500).send("Something went wrong");
   };
 };
 

@@ -1,5 +1,6 @@
 
 import mongoose from "mongoose";
+import validate from "mongoose-validator";
 
 const Schema = mongoose.Schema;
 
@@ -16,9 +17,10 @@ required: [true, "A surname is required"]
 
 email: {
 type: String, 
-required: [true, "An email is required"]
+required: [true, "An email is required"],
+unique: [true]
 }
 });
 
 
-export const userModel = mongoose.model('user', userSchema);
+export const userModel = mongoose.model('user', userSchema,);

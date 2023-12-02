@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import _ from "lodash";
 import {productModel} from "../models/products-schema.js";
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -7,6 +8,12 @@ export const getAllProducts = async (req, res)=> {
   try {
     const allProducts = await productModel.find()
 
+    if(_.isEmpty(allProducts)){
+      res.status(400)
+      res.send("No products")
+      return
+    }
+    
    if(allProducts) {
       res.status(200)
       res.send(allProducts)

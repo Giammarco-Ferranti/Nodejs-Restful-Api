@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import _ from "lodash";
 import { ordersModel } from "../models/orders-schema.js";
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -6,6 +7,12 @@ const ObjectId = mongoose.Types.ObjectId;
 export const getAllOrders = async(req, res)=>{
   try {
     const allOrders = await ordersModel.find()
+
+    if(_.isEmpty(allOrders)){
+      res.status(400)
+      res.send("No orders")
+      return
+    }
 
    if(allOrders) {
       res.status(200)
