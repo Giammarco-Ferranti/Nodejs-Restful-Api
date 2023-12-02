@@ -1,7 +1,8 @@
 import chai from "chai";
 import mongoose from "mongoose";
 import sinon from "sinon";
-import { createUser, deleteUser, getUser, updateUser } from "../src/controllers/users.js";
+import { createUser, deleteUser, getUser, updateUser } from "../controllers/users.js";
+import { userModel } from "../models/user-schema.js";
 let expect = chai.expect;
 
 
@@ -27,14 +28,14 @@ const user = {data: "user data"}
 
 
 it("should return status 200 and user data if found", async ()=>{
-  sinon.stub(mongoose.Model, "findById").resolves(user)
+  sinon.stub(userModel, "findById").resolves(user)
   await getUser(req, res);
   expect(res.status).to.have.been.calledWith(200)
   expect(res.send).to.have.been.calledWith(user)
 })
 
 it("should return 400 if the req is not correct", async ()=>{
-  sinon.stub(mongoose.Model, "findById").resolves(null)
+  sinon.stub(userModel, "findById").resolves(null)
   await getUser(req,res);
   expect(res.status).to.have.been.calledWith(400)
   expect(res.send).to.have.been.calledWith({message: "not valid id"})
@@ -61,7 +62,7 @@ it("create a user", ()=>{
 
   it("should return a status 200 if the user is created", async ()=>{
 
-    sinon.stub(mongoose.Model, "save").resolves(req)
+    sinon.stub(userModel, "save").resolves(req)
     await createUser(req, res)
     expect(res.status).to.be.calledWith(200)
     expect(res.send).to.have.been.calledWith({message: "user created"})
@@ -70,7 +71,7 @@ it("create a user", ()=>{
 
   it("should return a status 400 if the user is not correct", async ()=>{
 
-    sinon.stub(mongoose.Model, "save").resolves(null)
+    sinon.stub(userModel, "save").resolves(null)
     await createUser(req, res)
     expect(res.status).to.be.calledWith(400)
     expect(res.send).to.have.been.calledWith({message: "the user is not correct"})
@@ -100,7 +101,7 @@ describe("updateUser", ()=>{
 
     it("should return a status 200 if the user is found and update", async ()=>{
 
-      sinon.stub(mongoose.Model, "findByIdAndUpdate").resolves(req)
+      sinon.stub(userModel, "findByIdAndUpdate").resolves(req)
       await updateUser(req, res)
       expect(res.status).to.be.calledWith(200)
       expect(res.send).to.have.been.calledWith({message: "user updated"})
@@ -137,7 +138,7 @@ describe("deleteUser", ()=>{
     }
 
     it("should return a 200 status if the user is found and deleted", async ()=>{
-      sinon.stub(mongoose.Model, "findByIdAndDelete").resolves(req)
+      sinon.stub(userModel, "findByIdAndDelete").resolves(req)
       await deleteUser(req, res)
       expect(res.status).to.be.calledWith(200)
       expect(res.send).to.have.been.calledWith({message: "user deleted"})
