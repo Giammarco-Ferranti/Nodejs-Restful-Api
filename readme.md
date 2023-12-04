@@ -2,7 +2,7 @@
 
 <p id="description">This is a Rest Api build for the Start2Impact Nodejs course.</p>
 
-  
+<p>To get the best from this project first create an user, a product and then an order. Keep in mind that all the fields are required to post, check first the design schema. You can use postman to deal with the endpoints.</p>
   
 <h2>🧐 Features</h2>
 
